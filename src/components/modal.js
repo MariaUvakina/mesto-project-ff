@@ -10,7 +10,7 @@ function closePopup(popup) {
     document.removeEventListener("keydown", handleEscape);
 }
 
-//функция закрытия попапа через Escape
+//функция закрытия попапов через Escape
 function handleEscape(evt) {
     if (evt.key === "Escape") {
         const popupOpened = document.querySelector(".popup_is-opened");
@@ -18,4 +18,14 @@ function handleEscape(evt) {
     }
 }
 
-export { openPopup, closePopup };
+//функция закрытия попапов по оверлею
+function closePopupbyOverlay(evt){
+    evt.currentTarget.addEventListener("mousedown", (evt) => {
+        if (evt.target.classList.contains("popup_is-opened") || evt.target.classList.contains("popup__close")) {
+            closePopup(evt.currentTarget);
+        }
+    });
+}
+
+
+export { openPopup, closePopupbyOverlay };

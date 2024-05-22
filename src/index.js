@@ -1,11 +1,11 @@
 import "./pages/index.css";
 import {
-    initialCards,
     createCard,
     deleteCard,
     likeCardButton,
-} from "./components/cards.js";
-import { openPopup, closePopup } from "./components/modal.js";
+} from "./components/card.js";
+import { initialCards } from "./components/cards.js";
+import { openPopup, closePopupbyOverlay } from "./components/modal.js";
 
 // DOM узлы
 const cardsContainer = document.querySelector(".places__list");
@@ -15,7 +15,6 @@ const popups = document.querySelectorAll(".popup");
 const profileEditPopup = document.querySelector(".popup_type_edit");
 const newCardPopup = document.querySelector(".popup_type_new-card");
 const imagePopup = document.querySelector(".popup_type_image");
-const popupsContent = document.querySelectorAll(".popup__content");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const profileNameInput = document.querySelector(".popup__input_type_name");
@@ -54,30 +53,14 @@ newCardButton.addEventListener("click", () => {
 profileEditForm.addEventListener("submit", handleFormEditSubmit);
 newCardForm.addEventListener("submit", handleFormNewCardSubmit);
 
-//функция закрытия попапов
-popups.forEach((item) => {
-    item.addEventListener("mousedown", (evt) => {
-        if (evt.target.classList.contains("popup_is-opened")) {
-            closePopup(item);
-        } else if (evt.target.classList.contains("popup__close")) {
-            closePopup(item);
-        }
-    });
-});
-
-//отмена всплытия закрытия по попапу
-popupsContent.forEach(function callback(item) {
-    item.addEventListener("click", (evt) => {
-        evt.stopPropagation();
-    });
-});
+//обработчик события закрытия попапа
+popups.forEach((popup) => popup.addEventListener("mousedown", closePopupbyOverlay));
 
 //функция отправки формы редактирования
 function handleFormEditSubmit(evt) {
     evt.preventDefault();
     profileTitle.textContent = profileNameInput.value;
     profileDescription.textContent = profileDescriptionInput.value;
-    closePopup(evt.target.closest(".popup"));
 }
 
 //функция отправки формы создания новой карточки
@@ -91,9 +74,7 @@ function handleFormNewCardSubmit(evt) {
         likeCardButton
     );
     cardsContainer.prepend(newCard);
-    closePopup(evt.target.closest(".popup"));
-    newCardNameInput.value = "";
-    newCardLinkInput.value = "";
+    newCardForm.reset();
 }
 
 //функция автозаполнения полей для попапа редактирования
@@ -109,5 +90,5 @@ function handleImageClick(evt) {
     imgPopup.src = evt.target.src;
     imgPopup.alt = evt.target.alt;
     captionPopup.textContent = evt.target.alt;
-    openPopup(imagePopup, evt.target.src, evt.target.alt);
+    openPopup(imagePopup);
 }
