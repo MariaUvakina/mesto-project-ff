@@ -20,12 +20,10 @@ function handleEscape(evt) {
 
 //функция закрытия попапов по оверлею
 function closePopupbyOverlay(evt){
-    evt.currentTarget.addEventListener("mousedown", (evt) => {
-        if (evt.target.classList.contains("popup_is-opened") || evt.target.classList.contains("popup__close")) {
-            closePopup(evt.currentTarget);
-        }
-    });
-}
+    if (evt.target.classList.contains("popup_is-opened") || evt.target.classList.contains("popup__close")) {
+        closePopup(evt.currentTarget);
+    }
+};
 
 
 export { openPopup, closePopupbyOverlay };
